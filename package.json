@@ -1,0 +1,34 @@
+{
+  "name": "pic18bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=dev node index.js",
+    "build": "cross-env NODE_ENV=production node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/moyui/pic18bot.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/moyui/pic18bot/issues"
+  },
+  "homepage": "https://github.com/moyui/pic18bot#readme",
+  "dependencies": {
+    "@koa/router": "^9.3.1",
+    "axios": "^0.19.2",
+    "cheerio": "^1.0.0-rc.3",
+    "consola": "^2.14.0",
+    "htmlparser2": "^4.1.0",
+    "koa": "^2.13.0",
+    "mongodb": "^3.6.0",
+    "socks-proxy-agent": "^5.0.0"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.2"
+  }
+}
