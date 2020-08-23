@@ -1,6 +1,3 @@
-const fs = require("fs");
-const path = require("path");
-
 const consola = require("consola");
 const { fetch } = require("../utils/fetch");
 const { writeFileRecursive } = require("../utils/write");
@@ -10,11 +7,36 @@ class OriginImageService {
     this.fileRootPath = "./image/";
   }
 
-  originImageFetch(
-    { originUrl = "", masterUrl = "", artUrl = "", title = "" },
-    isMaster = false
-  ) {
-    return fetch(originUrl, {
+  async originImage({
+    originUrl = "",
+    masterUrl = "",
+    artUrl = "",
+    title = "",
+  }) {
+    let filePath = "";
+    try {
+      const data = await this._originImageFetch({ originUrl, artUrl });
+      filePath = await this._originImageWritin(data, title, false);
+    } catch (error) {
+      consola.log("originImageService获取图片失败, error:", error);
+      // 如果不是OriginUrl, 用masterUrl再请求一次
+      if (error.response.status === 404) {
+        consola.log("originImageService使用masterUrl请求, url:", masterUrl);
+        const data = await this._originImageFetch({
+          originUrl: masterUrl,
+          artUrl,
+        });
+        filePath = await this._originImageWritin(data, title, true);
+      }
+    }
+    return {
+      title,
+      filePath,
+    };
+  }
+
+  async _originImageFetch({ originUrl = "", artUrl = "" }) {
+    return await fetch(originUrl, {
       headers: {
         "User-Agent":
           "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36",
@@ -22,34 +44,25 @@ class OriginImageService {
         Referer: artUrl,
       },
       responseType: "arraybuffer",
-    })
-      .then((data) => {
-        consola.log("originImageService获取图片成功, data:", data);
-        this._originImageWritin(data, title, isMaster);
-      })
-      .catch((error) => {
-        consola.log("originImageService获取图片失败, error:", error);
-        // 如果不是OriginUrl, 用masterUrl再请求一次
-        if (!isMaster && error.response.status === 404) {
-          consola.log("originImageService使用masterUrl请求, url:", masterUrl);
-          this.originImageFetch(
-            {
-              originUrl: masterUrl,
-              masterUrl,
-              artUrl,
-              title,
-            },
-            true
-          );
-        }
-      });
+    }).then((data) => {
+      consola.log("originImageService获取图片成功, data:", data);
+      return null;
+    });
   }
 
   _originImageWritin(data, title, isMaster) {
     const filePath = this._getFilePath(title, isMaster);
     consola.log("originImageService开始保存图片, filePath:", filePath);
-    writeFileRecursive(filePath, data, (err) => {
-      if (err) throw err;
+    return new Promise((resolve, reject) => {
+      writeFileRecursive(filePath, data, (err) => {
+        if (err) {
+          return reject(error);
+        }
+        return resolve(filePath);
+      });
+    }).catch((error) => {
+      consola.log("originImageService写入图片失败, error:", error);
+      return null;
     });
   }
 

@@ -1,4 +1,5 @@
 const consola = require("consola");
+const { fetch } = require("./fetch");
 
 const modeClass = {
   master: (path) => {
@@ -24,6 +25,12 @@ const getBigImage = (baseUrl, mode) => {
   }
 };
 
+const getHTML = async (url) => {
+  const html = await fetch(url);
+  return html;
+};
+
 module.exports = {
   getBigImage,
+  getHTML
 };
