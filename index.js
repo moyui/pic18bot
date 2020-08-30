@@ -17,4 +17,6 @@ const dataBase = "mongodb://localhost:27017/runoob";
 
 app.use(router.routes()).use(router.allowedMethods());
 
-app.listen(8001);
+const server = app.listen(8001);
+server.setTimeout(1000 * 60 * 5);
+

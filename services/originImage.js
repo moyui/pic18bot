@@ -14,15 +14,16 @@ class OriginImageService {
     title = "",
   }) {
     let filePath = "";
+    let data = null;
     try {
-      const data = await this._originImageFetch({ originUrl, artUrl });
+      data = await this._originImageFetch({ originUrl, artUrl });
       filePath = await this._originImageWritin(data, title, false);
     } catch (error) {
       consola.log("originImageService获取图片失败, error:", error);
       // 如果不是OriginUrl, 用masterUrl再请求一次
       if (error.response.status === 404) {
         consola.log("originImageService使用masterUrl请求, url:", masterUrl);
-        const data = await this._originImageFetch({
+        data = await this._originImageFetch({
           originUrl: masterUrl,
           artUrl,
         });
@@ -32,6 +33,7 @@ class OriginImageService {
     return {
       title,
       filePath,
+      data,
     };
   }
 
@@ -46,7 +48,7 @@ class OriginImageService {
       responseType: "arraybuffer",
     }).then((data) => {
       consola.log("originImageService获取图片成功, data:", data);
-      return null;
+      return data;
     });
   }
 
@@ -56,7 +58,7 @@ class OriginImageService {
     return new Promise((resolve, reject) => {
       writeFileRecursive(filePath, data, (err) => {
         if (err) {
-          return reject(error);
+          return reject(err);
         }
         return resolve(filePath);
       });

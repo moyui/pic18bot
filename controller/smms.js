@@ -10,8 +10,6 @@ class SMMS {
   initRouter() {
     this.router.get("/v1/smms", async (ctx, next) => {
         const token = await pictureHostService().getToken();
-
-        console.log(token);
         await next();
     });
   }

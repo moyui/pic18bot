@@ -1,7 +1,15 @@
 const { rank } = require("../config/index");
 const { getHTML, getBigImage } = require("../utils/common");
 const { originImageService } = require("../services/originImage");
+const { pictureHostService } = require("../services/pictureHost");
 const cheerio = require("cheerio");
+
+function sleep(delay) {
+  var start = new Date().getTime();
+  while (new Date().getTime() - start < delay) {
+    continue;
+  }
+}
 
 class Rank {
   constructor(props) {
@@ -13,17 +21,23 @@ class Rank {
   initRouter() {
     this.router.get("/v1/rank", async (ctx, next) => {
       const rank = await this.getRank();
-      const content = this.getRankingItem(rank);
-
-      const test1 = content[0];
-      const file = await originImageService().originImage({
-        originUrl: test1.src,
-        masterUrl: test1.master,
-        artUrl: test1.href,
-        title: test1.title + "-" + test1.userName,
-      });
-
-      console.log(file);
+      const content = this.getRankingItem(rank).slice(0, 5);
+      let file = [];
+      for (let i = 0; i < content.length; i++) {
+        sleep((Math.random() + 1) * 1000);
+        file.push(
+          await originImageService().originImage({
+            originUrl: content[i].src,
+            masterUrl: content[i].master,
+            artUrl: content[i].href,
+            title: content[i].title + "-" + content[i].userName,
+          })
+        );
+      }
+      await pictureHostService().getToken();
+      for (let j = 0; j < file.length; j++) {
+        await pictureHostService().uploadImage(file[j].filePath);
+      }
       await next();
     });
   }
