@@ -4,6 +4,7 @@ const MongoClient = require("mongodb").MongoClient;
 
 const { rankController } = require("./controller/rank");
 const { smmsController } = require("./controller/smms");
+const loginHook = require("./hooks/login");
 
 const app = new Koa();
 const router = new Router();
@@ -15,8 +16,11 @@ const dataBase = "mongodb://localhost:27017/runoob";
   smmsController({ router });
 })();
 
+(function initHooks() {
+  loginHook();
+})();
+
 app.use(router.routes()).use(router.allowedMethods());
 
 const server = app.listen(8001);
 server.setTimeout(1000 * 60 * 5);
-

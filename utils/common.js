@@ -26,11 +26,11 @@ const getBigImage = (baseUrl, mode) => {
 };
 
 const getHTML = async (url) => {
-  const html = await fetch(url);
-  return html;
+  const res = await fetch(url);
+  return res.data;
 };
 
 module.exports = {
   getBigImage,
-  getHTML
+  getHTML,
 };

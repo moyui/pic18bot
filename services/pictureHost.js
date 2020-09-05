@@ -26,7 +26,7 @@ class PictureHostService {
       .then((res) => {
         const {
           data: { token },
-        } = res;
+        } = res.data;
         this.token = token;
         return token;
       })

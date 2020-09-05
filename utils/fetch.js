@@ -1,5 +1,6 @@
 const request = require("axios");
-const SocksProxyAgent = require('socks-proxy-agent');
+const fs = require("fs");
+const SocksProxyAgent = require("socks-proxy-agent");
 const consola = require("consola");
 
 const config = {
@@ -12,19 +13,22 @@ const config = {
   timeout: 3000,
 };
 
-const httpsAgent = new SocksProxyAgent('socks://127.0.0.1:1080');
-
+const httpsAgent = new SocksProxyAgent("socks://127.0.0.1:1080");
 
 const fetch = (url, options) => {
   options = Object.assign({}, config, options, {
     url,
-    httpsAgent
+    httpsAgent,
   });
+
+  if (fs.existsSync("cookie.txt")) {
+    options.headers["Cookie"] = fs.readFileSync("cookie.txt", "utf8");
+  }
 
   return new Promise((resolve, reject) => {
     request(options)
       .then((res) => {
-        return resolve(res.data);
+        return resolve(res);
       })
       .catch((error) => {
         consola.error(error);

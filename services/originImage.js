@@ -46,9 +46,9 @@ class OriginImageService {
         Referer: artUrl,
       },
       responseType: "arraybuffer",
-    }).then((data) => {
-      consola.log("originImageService获取图片成功, data:", data);
-      return data;
+    }).then((res) => {
+      consola.log("originImageService获取图片成功, data:", res.data);
+      return res.data;
     });
   }
 

@@ -27,6 +27,7 @@
     "htmlparser2": "^4.1.0",
     "koa": "^2.13.0",
     "mongodb": "^3.6.0",
+    "qs": "^6.9.4",
     "socks-proxy-agent": "^5.0.0"
   },
   "devDependencies": {
