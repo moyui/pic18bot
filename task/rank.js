@@ -122,7 +122,7 @@ const RankTask = async () => {
 
 module.exports = {
   RankTask: () => {
-    const time = 1000 * 60 * 60 * 8;
+    const time = 1000 * 60 * 60 * 12;
     // 立即执行一次
     RankTask();
     const timer = setInterval(RankTask, time);
