@@ -30,7 +30,15 @@ const getHTML = async (url) => {
   return res.data;
 };
 
+const sleep = (delay) => {
+  const start = new Date().getTime();
+  while (new Date().getTime() - start < delay) {
+    continue;
+  }
+};
+
 module.exports = {
   getBigImage,
   getHTML,
+  sleep
 };

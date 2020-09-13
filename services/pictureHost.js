@@ -1,7 +1,6 @@
 const { fetch } = require("../utils/fetch");
 const { smms } = require("../config/index");
 const FormData = require("form-data");
-const path = require("path");
 const fs = require("fs");
 const consola = require("consola");
 
@@ -22,6 +21,8 @@ class PictureHostService {
         username,
         password,
       },
+      needCookie: false,
+      needProxy: false,
     })
       .then((res) => {
         const {
@@ -36,25 +37,25 @@ class PictureHostService {
       });
   }
 
-  async createAlbums({ type, description }) {
-    if (!this.token) return Promise.reject();
-    return await fetch(URL.createAlbum, {
-      method: "post",
-      headers: {
-        Authorization: `basic ${this.token}`,
-      },
-      data: {
-        album_name: type || "default",
-        album_description: description || "",
-      },
-    });
-  }
+  // async createAlbums({ type, description }) {
+  //   if (!this.token) return Promise.reject();
+  //   return await fetch(URL.createAlbum, {
+  //     method: "post",
+  //     headers: {
+  //       Authorization: `basic ${this.token}`,
+  //     },
+  //     data: {
+  //       album_name: type || "default",
+  //       album_description: description || "",
+  //     },
+  //   });
+  // }
 
-  async uploadImage(file) {
-    if (!this.token) return Promise.reject();
+  uploadImage(file) {
+    if (!this.token) return Promise.reject("uploadImage notoken");
     const form = new FormData();
     form.append("smfile", fs.createReadStream(file));
-    return await fetch(URL.upload, {
+    return fetch(URL.upload, {
       method: "post",
       timeout: 0,
       headers: {
@@ -63,6 +64,23 @@ class PictureHostService {
         "Content-Type": "multipart/form-data",
       },
       data: form,
+      needCookie: false,
+      needProxy: false,
+    }).catch((error) => {
+      consola.error("uploadImage error", error);
+      return {
+        file_id: 0,
+        width: 0,
+        height: 0,
+        filename: "",
+        storename: "",
+        size: 0,
+        path: "",
+        hash: "",
+        url: "",
+        delete: "",
+        page: "",
+      };
     });
   }
 }

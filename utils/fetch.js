@@ -15,13 +15,20 @@ const config = {
 
 const httpsAgent = new SocksProxyAgent("socks://127.0.0.1:1080");
 
-const fetch = (url, options) => {
-  options = Object.assign({}, config, options, {
-    url,
-    httpsAgent,
-  });
+const fetch = (url, options = {}) => {
+  const { needCookie = true, needProxy = true } = options;
 
-  if (fs.existsSync("cookie.txt")) {
+  const base = {
+    url,
+  };
+
+  if (needProxy) {
+    base.httpsAgent = httpsAgent;
+  }
+
+  options = Object.assign({}, config, options, base);
+
+  if (needCookie && fs.existsSync("cookie.txt")) {
     options.headers["Cookie"] = fs.readFileSync("cookie.txt", "utf8");
   }
 

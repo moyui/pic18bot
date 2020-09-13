@@ -79,7 +79,7 @@ class OriginImageService {
     return (
       this.fileRootPath +
       timePath +
-      `${encodeURIComponent(fileName)}.${isMaster ? "jpg" : "png"}`
+      `${fileName}.${isMaster ? "jpg" : "png"}`
     );
   }
 }

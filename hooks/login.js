@@ -46,12 +46,11 @@ const postLogin = (post_key, cookie) => {
       post_key: post_key,
       source: "pc",
       ref: "wwwtop_accounts_index",
-      return_to: "http://www.pixiv.net/",
+      return_to: "http://www.pixiv.net/"
     }),
   })
     .then((response) => {
-      console.log(response.headers);
-      console.log(response);
+      console.log('pixivlogin', response);
       if (response.headers["set-cookie"]) {
         const cookie = response.headers["set-cookie"].join(" ;");
         consola.log("postLogin cookie", cookie);
