@@ -1,7 +1,7 @@
 const request = require("axios");
-const fs = require("fs");
 const SocksProxyAgent = require("socks-proxy-agent");
 const consola = require("consola");
+const cookie = require("../config").cookie;
 
 const config = {
   method: "get",
@@ -28,8 +28,8 @@ const fetch = (url, options = {}) => {
 
   options = Object.assign({}, config, options, base);
 
-  if (needCookie && fs.existsSync("cookie.txt")) {
-    options.headers["Cookie"] = fs.readFileSync("cookie.txt", "utf8");
+  if (needCookie && cookie) {
+    options.headers["Cookie"] = cookie;
   }
 
   return new Promise((resolve, reject) => {
