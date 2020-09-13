@@ -63,7 +63,7 @@ const RankTask = async () => {
   // 获取图床token
   await pictureService.getToken();
   const rank = await getRank();
-  const content = getRankingItem(rank).slice(28, 30);
+  const content = getRankingItem(rank);
   let file = [];
   for (let i = 0; i < content.length; i++) {
     sleep((Math.random() + 1) * 1000);
