@@ -58,6 +58,8 @@ const handleError = (error) => {
 };
 
 const RankTask = async () => {
+  consola.log("RankTask开始执行", new Date());
+
   // 获取图床token
   await pictureService.getToken();
   const rank = await getRank();

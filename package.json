@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "cross-env NODE_ENV=dev node index.js",
-    "build": "cross-env NODE_ENV=production node index.js",
+    "dev": "cross-env NODE_ENV='dev' node index.js",
+    "start": "cross-env NODE_ENV='production' pm2 start index.js --name picrobot",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

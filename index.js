@@ -17,10 +17,6 @@ const router = new Router();
   smmsController({ router });
 })();
 
-(function initTask() {
-  RankTask();
-})();
-
 app.use(router.routes()).use(router.allowedMethods());
 
 const server = app.listen(8001);
@@ -29,3 +25,9 @@ server.setTimeout(1000 * 60 * 5);
 process.on("uncaughtException", (err) => {
   consola.error("uncaughtException", err);
 });
+
+(function initTask() {
+  if (process.env.NODE_ENV === "production") {
+    RankTask();
+  }
+})();

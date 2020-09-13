@@ -22,7 +22,7 @@ const fetch = (url, options = {}) => {
     url,
   };
 
-  if (needProxy) {
+  if (needProxy && process.env.NODE_ENV === "dev") {
     base.httpsAgent = httpsAgent;
   }
 
