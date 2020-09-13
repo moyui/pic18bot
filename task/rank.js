@@ -83,6 +83,8 @@ const RankTask = async () => {
 
   for (let j = 0; j < file.length; j++) {
     consola.log("开始上传", file[j].image.filePath);
+    // 每间隔5s上传一次，防止超载
+    sleep(5 * 1000);
     const response = await pictureService.uploadImage(file[j].image.filePath);
     const smmsData = response.data;
     if (smmsData.success) {
