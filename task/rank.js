@@ -76,38 +76,38 @@ const RankTask = async () => {
     });
 
     file.push({
-      image: { ...content[i], filePath: fileData.filePath },
+      image: { ...content[i], filePath: fileData.filePath, smms: "" },
       smms: null,
     });
   }
 
-  for (let j = 0; j < file.length; j++) {
-    consola.log("开始上传", file[j].image.filePath);
-    // 每间隔5s上传一次，防止超载
-    sleep(5 * 1000);
-    const response = await pictureService.uploadImage(file[j].image.filePath);
-    const smmsData = response.data;
-    if (smmsData.success) {
-      file[j].image.smmsUrl = smmsData.data.url;
-      file[j].smms = smmsData.data;
-    } else {
-      consola.warn(smmsData);
-      file[j].image.smmsUrl = smmsData.images || "";
-    }
-  }
+  // for (let j = 0; j < file.length; j++) {
+  //   consola.log("开始上传", file[j].image.filePath);
+  //   // 每间隔5s上传一次，防止超载
+  //   sleep(5 * 1000);
+  //   const response = await pictureService.uploadImage(file[j].image.filePath);
+  //   const smmsData = response.data;
+  //   if (smmsData.success) {
+  //     file[j].image.smmsUrl = smmsData.data.url;
+  //     file[j].smms = smmsData.data;
+  //   } else {
+  //     consola.warn(smmsData);
+  //     file[j].image.smmsUrl = smmsData.images || "";
+  //   }
+  // }
 
   const dateLog = getDateLog();
 
   for (let k = 0; k < file.length; k++) {
     file[k].image.logDate = dateLog;
-    if (file[k].smms) {
-      SMMS.create(file[k].smms, function (error) {
-        if (error) {
-          return handleError(error);
-        }
-        consola.log("save success SMMS", file[k].smms);
-      });
-    }
+    // if (file[k].smms) {
+    //   SMMS.create(file[k].smms, function (error) {
+    //     if (error) {
+    //       return handleError(error);
+    //     }
+    //     consola.log("save success SMMS", file[k].smms);
+    //   });
+    // }
 
     Rank50.create(file[k].image, function (error) {
       if (error) {
